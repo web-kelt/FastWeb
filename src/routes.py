@@ -12,6 +12,7 @@ from src.models import News
 @app.get('/')
 def home(request: Request, db_session: Session = Depends(get_db)):
     news_list = db_session.query(News).all()
+    news_list = news_list[::-1]
     return templates.TemplateResponse('src/index.html',
                                       {'request': request,
                                        'app_name': settings.app_name,
@@ -20,30 +21,19 @@ def home(request: Request, db_session: Session = Depends(get_db)):
 
 
 @app.post('/add')
-def add(title: str = Form(...), db_session: Session = Depends(get_db)):
-    new_todo = ToDo(title=title)
-    db_session.add(new_todo)
+def add(title: str = Form(...), description: str = Form(...), db_session: Session = Depends(get_db)):
+    new_news = News(title=title, description=description)
+    db_session.add(new_news)
     db_session.commit()
 
     url = app.url_path_for('home')
     return RedirectResponse(url=url, status_code=HTTP_303_SEE_OTHER)
 
 
-@app.get('/update/{todo_id}')
-def update(todo_id: int, db_session: Session = Depends(get_db)):
-    todo = db_session.query(ToDo).filter(ToDo.id == todo_id).first()
-    todo.is_complete = not todo.is_complete
-    db_session.commit()
-
-    url = app.url_path_for('home')
-
-    return RedirectResponse(url=url, status_code=HTTP_302_FOUND)
-
-
 @app.get('/delete/{todo_id}')
 def delete(todo_id: int, db_session: Session = Depends(get_db)):
-    todo = db_session.query(ToDo).filter_by(id=todo_id).first()
-    db_session.delete(todo)
+    news = db_session.query(News).filter_by(id=todo_id).first()
+    db_session.delete(news)
     db_session.commit()
 
     url = app.url_path_for('home')
