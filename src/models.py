@@ -3,14 +3,6 @@ from sqlalchemy import Column, String, Integer, Boolean
 from src.database.base import Base, choose_db, check_db
 
 
-class ToDo(Base):
-    __tablename__ = 'todos'
-
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String)
-    is_complete = Column(Boolean, default=False)
-
-
 class News(Base):
     __tablename__ = 'news'
 
