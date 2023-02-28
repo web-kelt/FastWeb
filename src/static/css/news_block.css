@@ -4,14 +4,15 @@
 
 .del {
     position: absolute;
+    color: black;
     left: 1000px;
     margin-top: 110px;
-    border: 1px solid red;
-    padding: 1px 1px 1px 1px;
+    padding: 1px 10px 1px 10px;
+    border-radius: 10px;
 }
 
 .del:hover {
-    background: red;
+    background: #cd5c5c;
     color: black;
     transition: 1s;
 }
