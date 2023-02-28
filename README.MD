@@ -1,5 +1,7 @@
 Сайт кафедры 732 РТУ МИРЭА, реализованный на веб-фреймворке FastAPI с использованием СУБД PostgreSQL.
 
+![Image alt](https://github.com/web-kelt/FastWeb/blob/main/src/static/img/Screenshot%20from%202023-02-28%2016-47-50.png)
+
 
 **UPD 1.0**  от  _2.28.23_
 
