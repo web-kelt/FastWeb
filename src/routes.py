@@ -6,16 +6,16 @@ from starlette.status import HTTP_303_SEE_OTHER, HTTP_302_FOUND
 from src.config import settings
 from src.database.base import get_db
 from src.app import app, templates
-from src.models import ToDo
+from src.models import News
 
 
 @app.get('/')
 def home(request: Request, db_session: Session = Depends(get_db)):
-    todos = db_session.query(ToDo).all()
+    news_list = db_session.query(News).all()
     return templates.TemplateResponse('src/index.html',
                                       {'request': request,
                                        'app_name': settings.app_name,
-                                       'todo_list': todos}
+                                       'news_list': news_list}
                                       )
 
 
