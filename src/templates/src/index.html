@@ -37,6 +37,11 @@
                             Работы студентов
                         </a>
                     </li>
+                    <li class="signin">
+                        <a href="{{ url_for('github_login') }}">
+                            Войти
+                        </a>
+                    </li>
                 </ul>
             </div>
 
@@ -71,6 +76,10 @@
                     </div>
                     <button class="button" id="but1" type="submit">Добавить</button>
                 </form>
+            </div>
+
+            <div style="text-align: center;">
+                <h1 style="color: black; font-size: 90px;">I am : {{ user }}</h1>
             </div>
 
 
