@@ -3,7 +3,7 @@
 ![Image alt](https://github.com/web-kelt/FastWeb/blob/main/src/static/img/Screenshot%20from%202023-02-28%2016-47-50.png)
 
 
-**UPD 1.0**  от  _2.28.23_
+**UPD v0.1.1-alpha**  от  _2.28.23_
 
     Добавлен файл config.py и туда перенесена конфигурация приложения
     Добавлен модуль python-dotenv и файл .env для хранения значений переменных окружения приложения
