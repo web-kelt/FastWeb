@@ -8,7 +8,7 @@ from starlette.status import HTTP_303_SEE_OTHER, HTTP_302_FOUND
 from src.config import settings
 from src.database.base import get_db
 from src.app import app, templates
-from src.models import News
+from src.models import News, User
 
 github_client_id = '0cff75a071cb22116051'
 github_client_secret = '0ee1ae9a3470e37c63fd5b95e0448fe6ee24e897'
@@ -24,7 +24,7 @@ git = 'https://github.com/login/oauth/authorize?client_id'
 def home(request: Request, db_session: Session = Depends(get_db)):
     news_list = db_session.query(News).all()
     news_list = news_list[::-1]
-    user = 'null'
+    user = None
     return templates.TemplateResponse('src/index.html',
                                       {'request': request,
                                        'app_name': settings.app_name,
@@ -36,9 +36,19 @@ def home(request: Request, db_session: Session = Depends(get_db)):
 @app.post('/add')
 def add(    title: str = Form(...),
             description: str = Form(...),
+            genre: str = Form(...),
             db_session: Session = Depends(get_db)
         ):
-    new_news = News(title=title, description=description)
+    if genre == "ch1":
+        new_news = News(title=title, description=description, genre=dost)
+    if genre == "ch2":
+        new_news = News(title=title, description=description, genre=sport)
+    if genre == "ch3":
+        new_news = News(title=title, description=description, genre=stud)
+    if genre == "ch4":
+        new_news = News(title=title, description=description, genre=nau)
+    if genre == "ch5":
+        new_news = News(title=title, description=description, genre=other)
     db_session.add(new_news)
     db_session.commit()
 
@@ -65,6 +75,19 @@ def delete(todo_id: int, db_session: Session = Depends(get_db)):
 async def github_login():
         return RedirectResponse(f'https://github.com/login/oauth/authorize?client_id={github_client_id}', status_code=302)
 
+@app.get('/github-psevdo-login')
+async def github_psevdo_login(request: Request, db_session: Session = Depends(get_db)):
+        user = User('anetto', 'xx34324', True)
+        news_list = db_session.query(News).all()
+        news_list = news_list[::-1]
+        return templates.TemplateResponse('src/index.html',
+                                        {'request': request,
+                                        'app_name': settings.app_name,
+                                        'news_list': news_list,
+                                        'user': user}
+                                        )
+
+
 # получение информации и САМОЕ ГЛАВНОЕ - access token
 @app.get('/github-code')
 async def github_code(code: str, request: Request, db_session: Session = Depends(get_db)):
@@ -88,7 +111,7 @@ async def github_code(code: str, request: Request, db_session: Session = Depends
         #return RedirectResponse(url=url, status_code=HTTP_302_FOUND)
         news_list = db_session.query(News).all()
         news_list = news_list[::-1]
-        user = 'Bob'
+        user = User('anetto', 'xx34324', True)
         return templates.TemplateResponse('src/index.html',
                                         {'request': request,
                                         'app_name': settings.app_name,
@@ -112,3 +135,31 @@ async def github_code(code: str, request: Request, db_session: Session = Depends
 #---------------------------------------------------------------#
 #____________________//After registraion//______________________#
 #_______________________________________________________________#
+
+
+#---------------------------------------------------------------#
+#__________________________//Search//___________________________#
+#_______________________________________________________________#
+
+@app.get('/search')
+def search(   request: Request,
+              val: str = "",
+              db_session: Session = Depends(get_db)
+        ):
+        news_list = db_session.query(News).all()
+        finally_news_set = []
+        for i in news_list:
+                if val in i.title:
+                        finally_news_set.append(i)
+                        continue
+                if val in i.description:
+                        finally_news_set.append(i)
+                        continue
+        finally_news_set = finally_news_set[::-1]
+        user = None
+        return templates.TemplateResponse('src/index.html',
+                                        {'request': request,
+                                        'app_name': settings.app_name,
+                                        'news_list': finally_news_set,
+                                        'user': user}
+                                        )

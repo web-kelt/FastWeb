@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title> {{ title if title else app_name }} </title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', path='css/news_block.css') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', path='css/news.css') }}">
     <script src="{{ url_for('static', path='js/scroll.js') }}"></script>
 </head>
 <body>
-    <header class="header">
+    <header class="header" id="ForUp">
         <div class="container">
             <div class="nav">
                 <img src="{{ url_for('static', path='img/logo.png') }}" alt="MIREA" class="logo">
@@ -37,10 +37,22 @@
                             Работы студентов
                         </a>
                     </li>
+                    <li>
+                        <p style="background: white;">
+                            {{ user.login if user != None}}
+                        </p>
+                    </li>
                     <li class="signin">
-                        <a href="{{ url_for('github_login') }}">
+                        {% if user == None %}
+                        <!--<a href="{{ url_for('github_login') }}">-->
+                            <a href="{{ url_for('github_psevdo_login') }}">
                             Войти
                         </a>
+                        {% else %}
+                        <a href="/">
+                            Выйти
+                        </a>
+                        {% endif %}
                     </li>
                 </ul>
             </div>
@@ -62,24 +74,65 @@
     <section class="section">
         <div class="container" id = "id3">
             <div class="head">
-                <h2>
+                <h3>
                     <img src="{{ url_for('static', path='img/i2.svg')}}" alt="news"> Новости кафедры 732
                 </h2>
             </div>
 
+
+            {% if user.is_admin == true %}
             <div class="GUIForm">
                 <form class="form_add" action="{{ url_for('add') }}" method="post">
                     <div class="field_add">
                         <label class="label_add">Добавить новость</label><br>
                         <input class="input_add_1" type="text" name="title" placeholder="Введите название новости"><br>
-                        <input class="input_add_2" type="text" name="description" placeholder="Введите описание новости">
+                        <input class="input_add_2" type="text" name="description" placeholder="Введите описание новости"><br>
+                        <select name="genres">
+                            <option value="ch1">достижения кафедры</option>
+                            <option value="ch2">спортивные достижения</option>
+                            <option value="ch3">студентам</option>
+                            <option value="ch4">наука</option>
+                            <option value="ch5">все новости</option>
+                        </select>
                     </div>
                     <button class="button" id="but1" type="submit">Добавить</button>
                 </form>
             </div>
+            {% endif %}
 
-            <div style="text-align: center;">
-                <h1 style="color: black; font-size: 90px;">I am : {{ user }}</h1>
+
+            <div class="filter">
+                <ul class="check">
+                    <li>
+                        <button>достижения кафедры</button>
+                    </li>
+                    <li>
+                        <button>спортивные достижения</button> 
+                    </li>
+                    <li>
+                        <button>студентам</button>
+                    </li>
+                    <li>
+                        <button>наука</button>
+                    </li>
+                    <li>
+                        <button>все новости</button>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="search_form">
+                <p>Поиск новостей</p>
+                <form class="red_form" method="get" action="{{ url_for('search') }}">
+                    <input class="typedef" id="typeid1" name="val" type="text" placeholder="Искать здесь...">
+                    <button class="typedef" id="typeid2" type="submit"></button>
+                </form>
+            </div>
+
+
+            <div class="genres_form">
+                
             </div>
 
 
@@ -94,14 +147,18 @@
                             {{ news.title }}
                         </div>
                         <div class="field">
-                            {{ news.description }}
+                            {{ news.description}}
                         </div>
                         <a class="del" href="{{ url_for('delete', todo_id=news.id) }}">Удалить</a>
                     </div>
                 </a>
-                <hr>
+                <hr style="margin-top: 15px; margin-bottom: 15px;">
+                <p style="text-align: center;">МЕСТО ДЛЯ ВАШЕЙ РЕКЛАМЫ</p>
+                <hr style="margin-top: 15px; margin-bottom: 15px;">
             </div>
             {% endfor %}
+
+            <button class="up" onclick="myFunction()"></button>
 
         </div>
     </section>
@@ -111,10 +168,10 @@
             <img src="{{ url_for('static', path='img/logomini.svg')}}" alt="minilogo" class="minilogo">
             <div class="foot">
                 <h6>
-                    Ⓒ 1923-2022 Кафедра 732 РТУ МИРЭА
+                    Ⓒ 1923-2023 Кафедра 732 РТУ МИРЭА
                 </h6>
                 <h6>
-                    +7 (999) 999 - 36 - 36
+                    +7 (495) 989 - 36 - 36
                 </h6>
             </div>
         </div>
