@@ -24,36 +24,54 @@ git = 'https://github.com/login/oauth/authorize?client_id'
 def home(request: Request, db_session: Session = Depends(get_db)):
     news_list = db_session.query(News).all()
     news_list = news_list[::-1]
+
+    dost_news_list = [] #список новостей по жанру достижения кафедры
+    sport_news_list = [] #список новостей по жанру спорт
+    stud_news_list = [] #список новостей по жанру студентам
+    nau_news_list = [] #список новостей по жанру наука
+
+    for news in news_list:
+        if news.genre == "dost":
+                dost_news_list.append(news)
+                continue
+        if news.genre == "sport":
+                dost_news_list.append(news)
+                continue
+        if news.genre == "stud":
+                dost_news_list.append(news)
+                continue
+        if news.genre == "nau":
+                dost_news_list.append(news)
+                continue
+
     user = None
     return templates.TemplateResponse('src/index.html',
                                       {'request': request,
                                        'app_name': settings.app_name,
                                        'news_list': news_list,
-                                       'user': user}
-                                      )
+                                       'user': user,
+                                       'dost': dost_news_list,
+                                       'sport': sport_news_list,
+                                       'stud': stud_news_list,
+                                       'nau': nau_news_list
+                                       })
 
 
 @app.post('/add')
 def add(    title: str = Form(...),
             description: str = Form(...),
-            genre: str = Form(...),
+            genre: str = Form(default = "other"),
             db_session: Session = Depends(get_db)
         ):
-    if genre == "ch1":
-        new_news = News(title=title, description=description, genre=dost)
-    if genre == "ch2":
-        new_news = News(title=title, description=description, genre=sport)
-    if genre == "ch3":
-        new_news = News(title=title, description=description, genre=stud)
-    if genre == "ch4":
-        new_news = News(title=title, description=description, genre=nau)
-    if genre == "ch5":
-        new_news = News(title=title, description=description, genre=other)
-    db_session.add(new_news)
-    db_session.commit()
+        print(f"\n\n\n[INFO] title = {title}\n[INFO] description = {description}\n[INFO] genre = {genre}\n\n\n")
+        if genre == None:
+                genre = ""
+        new_news = News(title=title, description=description, genre=genre)
+        db_session.add(new_news)
+        db_session.commit()
 
-    url = app.url_path_for('home')
-    return RedirectResponse(url=url, status_code=HTTP_303_SEE_OTHER)
+        url = app.url_path_for('home')
+        return RedirectResponse(url=url, status_code=HTTP_303_SEE_OTHER)
 
 
 @app.get('/delete/{todo_id}')

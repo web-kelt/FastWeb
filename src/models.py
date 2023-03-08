@@ -24,7 +24,12 @@ class News(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     description = Column(String)
-    genge = Column(String)
+    genre = Column(String)
+
+    def __init__(self, title, description, genre):
+        self.title = title
+        self.description =description
+        self.genre = genre
 
 
 Base.metadata.create_all(bind=choose_db(arg_db=check_db))

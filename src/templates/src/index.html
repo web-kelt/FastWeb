@@ -10,6 +10,7 @@
     
     <link rel="stylesheet" href="{{ url_for('static', path='css/news.css') }}">
     <script src="{{ url_for('static', path='js/scroll.js') }}"></script>
+    <script src="{{ url_for('static', path='js/view.js') }}"></script>
 </head>
 <body>
     <header class="header" id="ForUp">
@@ -87,13 +88,8 @@
                         <label class="label_add">Добавить новость</label><br>
                         <input class="input_add_1" type="text" name="title" placeholder="Введите название новости"><br>
                         <input class="input_add_2" type="text" name="description" placeholder="Введите описание новости"><br>
-                        <select name="genres">
-                            <option value="ch1">достижения кафедры</option>
-                            <option value="ch2">спортивные достижения</option>
-                            <option value="ch3">студентам</option>
-                            <option value="ch4">наука</option>
-                            <option value="ch5">все новости</option>
-                        </select>
+                        <input class="input_add_3" type="text" name="genre" placeholder="Введите жанр"><br>
+                        <label class="upd">жанры могут быть достижения, спорт, студентам, наука</label>
                     </div>
                     <button class="button" id="but1" type="submit">Добавить</button>
                 </form>
@@ -104,23 +100,22 @@
             <div class="filter">
                 <ul class="check">
                     <li>
-                        <button>достижения кафедры</button>
+                        <button onclick="DostViewSet()">достижения кафедры</button>
                     </li>
                     <li>
-                        <button>спортивные достижения</button> 
+                        <button onclick="SportViewSet()">спортивные достижения</button> 
                     </li>
                     <li>
-                        <button>студентам</button>
+                        <button onclick="StudeViewSet()">студентам</button>
                     </li>
                     <li>
-                        <button>наука</button>
+                        <button onclick="NauViewSet()">наука</button>
                     </li>
                     <li>
-                        <button>все новости</button>
+                        <button onclick="AllNews()">все новости</button>
                     </li>
                 </ul>
             </div>
-
 
             <div class="search_form">
                 <p>Поиск новостей</p>
@@ -130,14 +125,10 @@
                 </form>
             </div>
 
-
-            <div class="genres_form">
-                
-            </div>
-
-
-            {% for news in news_list %}
-            <div class="bigdiv">
+<!-- Цикл для вывода из бд всех новостей при выборе в фильтре DostViewSet()-->
+            <div class="bigdiv" id="DostView" style="display: none">
+                {% for news in news_list %}
+                {% if news.genre == "dost" %}
                 <a class="trans" href="/">
                     <div class="newsdiv">
                         <div class="fotocard">
@@ -152,11 +143,99 @@
                         <a class="del" href="{{ url_for('delete', todo_id=news.id) }}">Удалить</a>
                     </div>
                 </a>
-                <hr style="margin-top: 15px; margin-bottom: 15px;">
-                <p style="text-align: center;">МЕСТО ДЛЯ ВАШЕЙ РЕКЛАМЫ</p>
-                <hr style="margin-top: 15px; margin-bottom: 15px;">
-            </div>
+            {% endif %}
             {% endfor %}
+            </div>
+
+<!-- Цикл для вывода из бд всех новостей при выборе в фильтре Sport()-->
+            <div class="bigdiv" id="SportView" style="display: none">
+                {% for news in news_list %}
+                {% if news.genre == "sport" %}
+                <a class="trans" href="/">
+                    <div class="newsdiv">
+                        <div class="fotocard">
+                            <img src="{{ url_for('static', path='img/fotocard.png')}}" alt="news">
+                        </div>
+                        <div class="title">
+                            {{ news.title }}
+                        </div>
+                        <div class="field">
+                            {{ news.description}}
+                        </div>
+                        <a class="del" href="{{ url_for('delete', todo_id=news.id) }}">Удалить</a>
+                    </div>
+                </a>
+                
+            {% endif %}
+            {% endfor %}
+            </div>
+
+<!-- Цикл для вывода из бд всех новостей при выборе в фильтре StudViewSet()-->
+            <div class="bigdiv" id="StudView" style="display: none">
+                {% for news in news_list %}
+                {% if news.genre == "stud" %}
+                <a class="trans" href="/">
+                    <div class="newsdiv">
+                        <div class="fotocard">
+                            <img src="{{ url_for('static', path='img/fotocard.png')}}" alt="news">
+                        </div>
+                        <div class="title">
+                            {{ news.title }}
+                        </div>
+                        <div class="field">
+                            {{ news.description}}
+                        </div>
+                        <a class="del" href="{{ url_for('delete', todo_id=news.id) }}">Удалить</a>
+                    </div>
+                </a>
+                
+            {% endif %}
+            {% endfor %}
+            </div>
+
+<!-- Цикл для вывода из бд всех новостей при выборе в фильтре NauViewSet()-->
+            <div class="bigdiv" id="NauView" style="display: none">
+                {% for news in news_list %}
+                {% if news.genre == "nau" %}
+                <a class="trans" href="/">
+                    <div class="newsdiv">
+                        <div class="fotocard">
+                            <img src="{{ url_for('static', path='img/fotocard.png')}}" alt="news">
+                        </div>
+                        <div class="title">
+                            {{ news.title }}
+                        </div>
+                        <div class="field">
+                            {{ news.description}}
+                        </div>
+                        <a class="del" href="{{ url_for('delete', todo_id=news.id) }}">Удалить</a>
+                    </div>
+                </a>
+                
+            {% endif %}
+            {% endfor %}
+            </div>
+
+<!-- Цикл для вывода из бд всех новостей при выборе в фильтре AllNews()-->
+            <div class="bigdiv" id="NewsView">
+                {% for news in news_list %}
+                <a class="trans" href="/">
+                    <div class="newsdiv">
+                        <div class="fotocard">
+                            <img src="{{ url_for('static', path='img/fotocard.png')}}" alt="news">
+                        </div>
+                        <div class="title">
+                            {{ news.title }}
+                        </div>
+                        <div class="field">
+                            {{ news.description}}
+                        </div>
+                        <a class="del" href="{{ url_for('delete', todo_id=news.id) }}">Удалить</a>
+                    </div>
+                </a>
+                
+            {% endfor %}
+            </div>
 
             <button class="up" onclick="myFunction()"></button>
 
